@@ -1,0 +1,89 @@
+<nav class="navbar fixed-top my-navbar navbar-expand-sm navbar-dark bg-dark">
+  <div class=" container-fluid h-100 px-100 px-20-mobile">
+    <div class="navbar-brand text-center">
+      <a href="#"><img class="navbar-logo" src="assets/images/logo.png" alt="Logo.png" /></a>
+      <a href="#" class="logo-text mb-0">Warehouse</a>
+    </div>
+
+    <!-- Desktop -->
+    <div class="desktop-links h-100">
+      <ul class="navbar-nav me-auto  h-100">
+        <li ngbDropdown #categoryDrop="ngbDropdown" class="nav-item navbar-button-container h-100 d-flex align-items-center">
+          <a
+            id="categoriesSection"
+            class="nav-link navbar-button"
+            tabindex="0"
+            (click)="openDropdown(categoryDrop)"
+            ngbDropdownToggle
+            href="javascript:void(0)">Categories</a>
+          <div ngbDropdownMenu aria-labelledby="categoriesSection" class="nav-dropdown-menu">
+            <a ngbDropdownItem href="#" (click)="$event.preventDefault()" class="nav-dropdown-section-button">Show all categories</a>
+            <div class="horizontal-separator h-1px mx-10px bg-gray"></div>
+            <a ngbDropdownItem href="#" (click)="$event.preventDefault()" class="nav-dropdown-section-button">Add a new category</a>
+          </div>
+        </li>
+        <li class="separator"></li>
+        <li ngbDropdown #productsDrop="ngbDropdown" class="nav-item navbar-button-container h-100 d-flex align-items-center">
+            <a
+              id="productsSection"
+              class="nav-link navbar-button"
+              tabindex="0"
+              (click)="openDropdown(productsDrop)"
+              ngbDropdownToggle
+              href="javascript:void(0)">Products</a>
+            <div ngbDropdownMenu aria-labelledby="productsSection" class="nav-dropdown-menu">
+              <a ngbDropdownItem href="#" (click)="$event.preventDefault()" class="nav-dropdown-section-button">Show all products</a>
+              <div class="horizontal-separator h-1px mx-10px bg-gray"></div>
+              <a ngbDropdownItem href="#" (click)="$event.preventDefault()" class="nav-dropdown-section-button">Add a new product</a>
+            </div>
+          </li>
+      </ul>
+    </div>
+
+    <!-- Mobile -->
+    <ng-template #mobileMenu let-modal class="mobile-menu">
+      <div class="modal-header mobile-menu-header">
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+      </div>
+      <div class="modal-body">
+        <div ngbAccordion [closeOthers]="true">
+          <div ngbAccordionItem [destroyOnHide]="true" class="link-mobile-content">
+            <button ngbAccordionButton class="link-mobile-title">Categories</button>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody class="pt-0">
+                <a href="#" class="mobile-link w-100">Show all categories</a>
+                <div class="horizontal-separator h-1px"></div>
+                <a href="#" class="mobile-link w-100">Add a new category</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="horizontal-separator h-1px"></div>
+
+          <div ngbAccordionItem [destroyOnHide]="true" class="link-mobile-content">
+            <button ngbAccordionButton  class="link-mobile-title">Products</button>
+            <div ngbAccordionCollapse>
+              <div ngbAccordionBody class="pt-0">
+                <a href="#" class="mobile-link w-100">Show all products</a>
+                <div class="horizontal-separator h-1px"></div>
+                <a href="#" class="mobile-link w-100">Add a new product</a>
+              </div>
+            </div>
+          </div>
+
+          <div class="horizontal-separator h-1px"></div>
+        </div>
+      </div>
+    </ng-template>
+
+    <div class="mobile-buttons">
+      <button class="options-mobile-button h-100" (click)="openMobileMenu(mobileMenu)">
+        <div class="burger-menu">
+          <div class="bar"></div>
+          <div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+      </button>
+    </div>
+  </div>
+</nav>
