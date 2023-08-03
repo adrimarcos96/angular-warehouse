@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component,  } from '@angular/core';
+import { CommonModule } from "@angular/common";
 import {
   NgbDropdownModule,
   NgbDropdownConfig,
@@ -10,12 +11,32 @@ import {
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [NgbDropdownModule, NgbAccordionModule],
+  imports: [CommonModule, NgbDropdownModule, NgbAccordionModule],
   providers: [],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent {
+  links = [
+    {
+      title: 'Categories',
+      url: "#",
+      sectionId: 'categoriesSection',
+      options: [
+        { text: 'Show all categories', url: '#' },
+        { text: 'Add a new category', url: '#' }
+      ]
+    },
+    {
+      title: 'Products',
+      url: "#",
+      sectionId: 'productsSection',
+      options: [
+        { text: 'Show all products', url: '#' },
+        { text: 'Add a new product', url: '#' }
+      ]
+    }
+  ]
   isMobileMenuOpen : boolean = false;
   mobileMenu : any;
 

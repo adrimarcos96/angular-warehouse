@@ -140,6 +140,7 @@
     --bs-accordion-active-bg: transparent;
     --bs-accordion-border-width: 0px;
     border-radius: 0px;
+    text-decoration: none;
   }
 
   .link-mobile-title:hover {
@@ -153,6 +154,10 @@
 
   .mobile-link:hover {
     background-color: #c9c9c9;
+  }
+
+  .accordion-button-arrow-hidden {
+    --bs-accordion-btn-active-icon: none;
   }
 }
 
