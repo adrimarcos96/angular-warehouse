@@ -1,17 +1,12 @@
-import { Component,  } from '@angular/core';
-import { CommonModule } from "@angular/common";
+import { Component } from '@angular/core';
 import {
-  NgbDropdownModule,
   NgbDropdownConfig,
   NgbDropdown,
-  NgbModal,
-  NgbAccordionModule
+  NgbModal
 } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-header',
-  standalone: true,
-  imports: [CommonModule, NgbDropdownModule, NgbAccordionModule],
   providers: [],
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
