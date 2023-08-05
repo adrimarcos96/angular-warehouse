@@ -1,0 +1,13 @@
+.pages-content {
+  width: 100%;
+  padding-top: 130px;
+  padding-right: 30px;
+  padding-left: 30px;
+}
+
+@media screen and (max-width: 980px) {
+  .pages-content {
+    padding-right: 0px;
+    padding-left: 0px;
+  }
+}
