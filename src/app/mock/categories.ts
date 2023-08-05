@@ -3,8 +3,11 @@ import { Category } from '../models/category';
 export const categories: Category[] = [
   {
     id: "c4e2f844-d79b-49b1-1c01-08db91f85749",
-    name: "Cervezas",
-    description: "Bebidas que contienen mucho mucho Alcohol",
+    name: "Categoria larga lahd eiugf eiug ewufg",
+    description: `Bebidas que contienen mucho mucho Alcohol. Bebidas que contienen mucho mucho Alcohol. Bebidas que
+    contienen mucho mucho Alcohol. Bebidas que contienen mucho mucho Alcohol Bebidas que contienen mucho mucho Alcohol
+    Bebidas que contienen mucho mucho Alcohol Bebidas que contienen mucho mucho Alcohol  Bebidas que contienen mucho mucho
+    Alcohol Bebidas que contienen mucho mucho Alcohol`,
     image: 'assets/images/no-image.png'
   },
   {
