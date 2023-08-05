@@ -1,3 +1,5 @@
+@import '../assets/styles/global-variables';
+
 .pages-content {
   width: 100%;
   padding-top: 130px;
@@ -5,7 +7,7 @@
   padding-left: 30px;
 }
 
-@media screen and (max-width: 980px) {
+@media screen and (max-width: $max-mobile-screen-size) {
   .pages-content {
     padding-right: 0px;
     padding-left: 0px;
