@@ -47,7 +47,6 @@ export class CategoriesComponent {
 
     }
 
-    console.log(categoriesGroupedByPages)
-    return { pages: categoriesGroupedByPages, total: categories.length  }
+    return { pages: categoriesGroupedByPages, total: categories.length }
   }
 }
