@@ -23,6 +23,7 @@
 }
 
 .categoryNameTxt {
+  color: #212529;
   -webkit-box-orient: vertical;
   display: -webkit-box;
   -webkit-line-clamp: 1;
@@ -39,11 +40,12 @@
     margin-bottom: 0px;
   }
 
-  .mobile-category-card {
+  .display-desktop-none {
     display: none;
   }
 
   .txt {
+    color: #212529;
     -webkit-box-orient: vertical;
     display: -webkit-box;
     -webkit-line-clamp: 3;
@@ -99,7 +101,6 @@
     min-height: 100px;
     max-height: 190px;
     padding-left: 0px;
-    margin-bottom: 10px;
     border-radius: 3px;
   }
 
@@ -126,6 +127,7 @@
   }
 
   .txt {
+    color: #212529;
     -webkit-box-orient: vertical;
     display: -webkit-box;
     -webkit-line-clamp: 2;

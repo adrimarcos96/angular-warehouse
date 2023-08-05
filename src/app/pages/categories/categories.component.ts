@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Category } from '../../models/category';
 import { CommonModule } from '@angular/common';
-import { categories } from '../../mock/categories'
+import { CategoriesService } from "../../services";
 
 @Component({
   standalone: true,
@@ -12,41 +12,16 @@ import { categories } from '../../mock/categories'
 })
 
 export class CategoriesComponent {
-  pageSize = 9;
+  pageSize = 6;
   totalCategories = 155;
   categoriesToShow = 0;
   categoryPages: Category[][] = [];
 
+  constructor(private categoriesService: CategoriesService) {}
+
   ngOnInit() {
-    const groupedCategories = this.groupCategoriesByPages();
-    this.categoryPages = groupedCategories.pages;
-    this.categoriesToShow = groupedCategories.total;
-  }
-
-  groupCategoriesByPages() {
-    const categoriesGroupedByPages = []
-    let page: Category[] = []
-    let currentPage = 1
-
-    for (let i = 0; i < categories.length; i++) {
-      const category: Category = categories[i];
-      if (i < (this.pageSize) * currentPage) {
-        page.push(category)
-      }
-
-      if (i >= this.pageSize * currentPage || i === categories.length -1) {
-        categoriesGroupedByPages.push(page)
-        page = [category]
-
-        if (i !== categories.length -1) {
-          currentPage++;
-        } else if (i >= this.pageSize * currentPage)  {
-          categoriesGroupedByPages.push(page)
-        }
-      }
-
-    }
-
-    return { pages: categoriesGroupedByPages, total: categories.length }
+    const { pages, total } = this.categoriesService.getCategoriesByPages(this.pageSize);
+    this.categoryPages = pages;
+    this.categoriesToShow = total;
   }
 }
