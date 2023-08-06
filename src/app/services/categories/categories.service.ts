@@ -60,8 +60,21 @@ export class CategoriesService {
         })
       )
       .subscribe((transformedResponse: any) => {
+        let pages = []
+        if (this.categoriesData.pages.length > 0 && transformedResponse.page === this.categoriesData.page) {
+          pages = this.categoriesData.pages.map((page: any, index: number) => {
+            if (index === transformedResponse.page) {
+              return transformedResponse.categories;
+            }
+
+            return page;
+          });
+        } else {
+          pages = [...this.categoriesData.pages, transformedResponse.categories];
+        }
+
         this.categoriesData = {
-          pages: [...this.categoriesData.pages, transformedResponse.categories],
+          pages: pages,
           categoriesToShow: transformedResponse.categoriesToShow,
           page: transformedResponse.page,
           total: transformedResponse.total

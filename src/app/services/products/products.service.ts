@@ -50,11 +50,24 @@ export class ProductsService {
         })
       )
       .subscribe((transformedResponse: any) => {
+        let pages = []
+        if (this.productsData.pages.length > 0 && transformedResponse.page === this.productsData.page) {
+          pages = this.productsData.pages.map((page: any, index: number) => {
+            if (index === transformedResponse.page) {
+              return transformedResponse.products;
+            }
+
+            return page;
+          });
+        } else {
+          pages = [...this.productsData.pages, transformedResponse.products];
+        }
+
         this.productsData = {
           page: transformedResponse.page,
           productsToShow: transformedResponse.productsToShow,
           total: transformedResponse.total,
-          pages: [...this.productsData.pages, transformedResponse.products]
+          pages: pages
         }
         this.productsDataUpdated.next(this.productsData)
       });
@@ -62,5 +75,28 @@ export class ProductsService {
 
   getProductsDataUpdadateListener() {
     return this.productsDataUpdated.asObservable();
+  }
+
+  getProductById() {
+    return this.http.post(serverUrls.getProductDetails, {})
+      .pipe(
+        map((response: any) => {
+          const product = response.data
+          return {
+            success: response.success,
+            message: response.message,
+            product: {
+              id: product.id,
+              name: product.name,
+              code: product.code,
+              category: product.category,
+              description: product.description,
+              image: product.image,
+              defaultPrice: product.defaultPrice,
+              defaultCost: product.defaultCost
+            }
+          }
+        })
+      )
   }
 }
