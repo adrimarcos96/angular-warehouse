@@ -1,8 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from "@angular/router";
-import { CategoriesService } from "../../services";
-import { groupByPages } from "../../utils/index.util";
+import { CategoriesService, ProductsService } from "../../services";
 
 @Component({
   selector: 'app-items-list',
@@ -20,7 +19,7 @@ export class ItemsListComponent {
   @Input() listType = '';
   @Input() pageSize = 9;
 
-  constructor(private categoriesService: CategoriesService) {}
+  constructor(private categoriesService: CategoriesService, private productsService: ProductsService) {}
 
   ngOnInit() {
     console.log(`#### Showing list for type: ${this.listType}`);
@@ -37,13 +36,17 @@ export class ItemsListComponent {
         this.itemDeatilsBaseUrl = 'products/';
         this.categoriesService.getCategoryById(this.id, this.pageSize);
         this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((data: any) => {
-          this.itemsPages = [data.category.items];
+          this.itemsPages = [data.category.products];
           this.isLoading = false;
         });
         break;
 
-      case 'Item':
-        console.log('Using itemsService')
+      case 'Product':
+        this.itemDeatilsBaseUrl = 'products/';
+        this.productsService.getProductsDataUpdadateListener().subscribe((data: any) => {
+          this.itemsPages = data.pages;
+          this.isLoading = false;
+        });
         break;
     }
   }

@@ -1,7 +1,7 @@
 import { environment } from "../../environments/environment";
+
 export const serverUrls = {
   searchCategories: environment.backendUrl +'/Category/Search',
   getCategoryDetails: environment.backendUrl +'/Category',
-  searchProducts: environment.backendUrl +'/Item/Search',
-  searchItems: environment.backendUrl +'/Item/Search'
+  searchProducts: environment.backendUrl +'/Item/Search'
 };

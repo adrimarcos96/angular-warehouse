@@ -16,8 +16,8 @@ import { ItemsListComponent } from "../../components/items-list/items-list.compo
 export class CategoryDetailsComponent {
   categoryId=""
   isLoding = true;
-  itemsToShow = 0;
-  totalItems = 0;
+  productsToShow = 0;
+  totalProducts = 0;
   category: Category | undefined;
   pageSize = 5;
 
@@ -31,8 +31,8 @@ export class CategoryDetailsComponent {
       const category = response.category
       if (category) {
         this.category = category;
-        this.itemsToShow = category.items ? category.items.length : 0;
-        this.totalItems = response.totalItems;
+        this.productsToShow = response.productsToShow;
+        this.totalProducts = response.totalProducts;
       } else {
         console.log('Redirecting to 404 page');
       }

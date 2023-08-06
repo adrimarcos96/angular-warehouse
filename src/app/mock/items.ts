@@ -1,6 +1,6 @@
-import { Item } from '../models/item';
+import { Product } from '../models/product';
 
-export const items: Item[] = [
+export const products: Product[] = [
   {
     id: "feb17d0e-3e4d-46df-559d-08db9438c380",
     code: "Dolorem qu",

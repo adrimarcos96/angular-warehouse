@@ -1,12 +1,11 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from "@angular/common/http";
-import { Subject, Observable } from "rxjs";
+import { Subject } from "rxjs";
 import { map, switchMap } from "rxjs/operators";
 import { serverUrls } from "../../config/httpConfig";
 
 import { Category } from "../../models/category";
-import { categories } from "../../mock/categories";
-import { items } from "../../mock/items";
+import { Product } from "../../models/product";
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +21,7 @@ export class CategoriesService {
   private categoryDetailsUpdated = new Subject<{ success: boolean; category: Category|null; itemsPage: number; totalItems: number; }>();
 
   categoriesData: any = {
-    page: 1,
+    page: 0,
     pages: [],
     categoriesToShow: 0,
     total: 0
@@ -30,23 +29,23 @@ export class CategoriesService {
 
   private categoriesDataUpdated = new Subject<{ pages: any; categoriesToShow: number; page: number; total: number; }>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getCategoriesByPages(page: number, pageSize: number) {
-    // const finish = startIndex + pageSize > categories.length ? categories.length : startIndex + pageSize;
     const requestBody = {
       pageNo: page,
       pageSize: pageSize,
       filters: [{ Alias: "IsActive", Value: "True"}]
     };
-    this.http.post<{ success: boolean; message: string; items: any; pageSize: number; pageNo: number; total: number; }>(serverUrls.searchCategories, requestBody)
+
+    this.http.post(serverUrls.searchCategories, requestBody)
       .pipe(
-        map(response => {
+        map((response: any) => {
           return {
             page: response.pageNo,
             pageSize: response.pageSize,
             success: response.success,
-            categories: response.items.map((category:any) => {
+            categories: response.items.map((category: Category) => {
                 return {
                   id: category.id,
                   name: category.name,
@@ -94,15 +93,16 @@ export class CategoriesService {
               return {
                 success: itemsResponse.success,
                 page: itemsResponse.pageNo,
-                totalItems: itemsResponse.total,
+                totalProducts: itemsResponse.total,
+                productsToShow: itemsResponse.items ? itemsResponse.items.length : 0,
                 category: {
                   id: response.data.id,
                   name: response.data.name,
                   description: response.data.description,
-                  items: itemsResponse.items.map((item: any) => {
+                  products: itemsResponse.items.map((product: Product) => {
                     return {
-                      ...item,
-                      image: item.image || 'assets/images/no-image.png'
+                      ...product,
+                      image: product.image || 'assets/images/no-image.png'
                     }
                   })
                 }
@@ -116,20 +116,11 @@ export class CategoriesService {
           success: transformedCategoryDetails.success,
           category: transformedCategoryDetails.category,
           itemsPage: transformedCategoryDetails.page,
-          totalItems: transformedCategoryDetails.totalItems
+          totalProducts: transformedCategoryDetails.totalProducts,
+          productsToShow: transformedCategoryDetails.productsToShow
         }
         this.categoryDetailsUpdated.next(this.categoryDetails)
       });
-
-    // const category: Category | undefined = categories.find(cat => cat.id === categoryId);
-    // if (category) {
-    //   const itemsFetched = items.filter(item => item.category === category.id)
-    //   const finish = startIndex + itemsSize > itemsFetched.length ? itemsFetched.length : startIndex + itemsSize;
-    //   category.items = itemsFetched.slice(startIndex, finish)
-    // }
-
-    // this.category = category;
-    // return { category: this.category, totalItems: 92 };
   }
 
   getCategoryDetailsUpdadateListener() {

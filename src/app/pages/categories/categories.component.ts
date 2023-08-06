@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink, RouterLinkActive } from "@angular/router";
-import { Category } from '../../models/category';
+import { RouterLink } from "@angular/router";
 import { CategoriesService } from "../../services";
 import { ItemsListComponent } from "../../components/items-list/items-list.component";
 
 @Component({
   selector: 'app-categories',
   standalone: true,
-  imports: [CommonModule, RouterLink, RouterLinkActive, ItemsListComponent],
+  imports: [CommonModule, RouterLink, ItemsListComponent],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
@@ -23,7 +22,7 @@ export class CategoriesComponent {
 
   ngOnInit() {
     this.categoriesService.getCategoriesByPages(0, this.pageSize);
-    this.categoriesService.getCategoriesDataUpdadateListener().subscribe(data => {
+    this.categoriesService.getCategoriesDataUpdadateListener().subscribe((data: any) => {
       this.categoriesToShow = data.categoriesToShow;
       this.total = data.total;
     })
