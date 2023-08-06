@@ -39,4 +39,16 @@ export class CategoryDetailsComponent {
       this.isLoding = false;
     });
   }
+
+  updateCategory() {
+    if (this.category) {
+      console.log(`Navigating to update product page. Category id: ${this.category.id}`);
+    }
+  }
+
+  deleteCategory() {
+    if (this.category) {
+      console.log(`Removing category: ${this.category.id}`);
+    }
+  }
 }

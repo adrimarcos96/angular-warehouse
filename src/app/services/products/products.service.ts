@@ -77,8 +77,8 @@ export class ProductsService {
     return this.productsDataUpdated.asObservable();
   }
 
-  getProductById() {
-    return this.http.post(serverUrls.getProductDetails, {})
+  getProductById(id: string) {
+    return this.http.post(`${serverUrls.getProductDetails}/${id}`, {})
       .pipe(
         map((response: any) => {
           const product = response.data
@@ -91,7 +91,7 @@ export class ProductsService {
               code: product.code,
               category: product.category,
               description: product.description,
-              image: product.image,
+              image: product.image || 'assets/images/no-image.png',
               defaultPrice: product.defaultPrice,
               defaultCost: product.defaultCost
             }

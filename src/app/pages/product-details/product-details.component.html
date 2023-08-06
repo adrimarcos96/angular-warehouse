@@ -1,0 +1,65 @@
+<div id="product-details">
+    <div class="row justify-content-center mx-0" *ngIf="isLoading; else productDetails"> Loding... </div>
+    <ng-template #productDetails>
+      <div class="container px-0" *ngIf="product">
+        <!-- Product main details (name, category, description and image) -->
+        <!-- Desktop -->
+        <div class="desktop-category-header row mx-0 w-100 mb-4">
+          <div class="col-4 pl-0">
+            <img class="desktop-img-category w-100" src="{{product.image}}" alt="Product Image">
+          </div>
+          <div class="col-8 pr-0 pt-4">
+            <h5 class="mb-4"><b>{{ product.name }}</b></h5>
+            <h6><b>Category:</b> {{product.category}}</h6>
+            <h6><b>Description:</b> {{product.description}}</h6>
+          </div>
+        </div>
+
+        <!-- Mobile -->
+        <div class="mobile-category-header mb-4">
+          <div class="mobile-img-container row w-100 justify-content-center mx-0 mb-4">
+            <img class="mobile-img-category h-100" src="assets/images/no-image.png" alt="Category Image">
+          </div>
+          <h5><b>{{product.name}}</b></h5>
+          <p class="text-justify"><b>Description:</b> {{product.description}}</p>
+        </div>
+
+        <hr />
+
+        <!-- Desktop -->
+        <div class="desktop row mx-0 w-100">
+          <div class="col-6">
+            <h6 class="mb-4"><b>Code:</b> {{product.code}}</h6>
+            <h6 class="mb-4"><b>Default price:</b> ${{product.defaultPrice}}</h6>
+            <h6 class="mb-4"><b>Default cost:</b> ${{product.defaultCost}}</h6>
+          </div>
+          <div class="col-2 row justify-content-center">
+            <div class="desktop-horizontal-separator px-0"></div>
+          </div>
+          <div class="col-4 px-4">
+            <h5 class="mb-4 text-center">Actions</h5>
+            <div class="actions">
+              <button class="btn btn-primary w-100 mb-3 border-radius-3px" (click)="updateProduct()">Update product</button>
+              <button class="btn btn-danger w-100 border-radius-3px" (click)="deleteProduct()">Detele product</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Mobile -->
+        <div class="mobile w-100  my-4">
+          <h6 class="mb-4"><b>Code:</b> {{product.code}}</h6>
+          <h6 class="mb-4"><b>Default price:</b> ${{product.defaultPrice}}</h6>
+          <h6 class="mb-4"><b>Default cost:</b> ${{product.defaultCost}}</h6>
+        </div>
+
+        <hr class="mobile" />
+
+        <div class="mobile w-100  my-4">
+          <h6 class="mb-4"><b>Actions</b></h6>
+          <button class="btn btn-primary w-100 mb-3 border-radius-3px" (click)="updateProduct()">Update product</button>
+          <button class="btn btn-danger w-100 border-radius-3px" (click)="deleteProduct()">Detele product</button>
+        </div>
+      </div>
+    </ng-template>
+  </div>
+

@@ -1,13 +1,17 @@
 @import '../../../assets/styles/global-variables';
 
-.desktop-img-category {
-  min-height: 250px;
+#product-details {
+  margin-bottom: 30px;
 }
 
 .desktop-horizontal-separator {
   width: 1px;
   height: 100%;;
   background-color: #adb5bd;
+}
+
+.desktop-img-category {
+  min-height: 250px;
 }
 
 .border-radius-3px {
