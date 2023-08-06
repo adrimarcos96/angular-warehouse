@@ -1,5 +1,5 @@
 
-export function groupByPages(pageSize:number, items: any[]) : { pages: any[][], total: number } {
+export function groupByPages(pageSize:number, items: any[]) : { pages: any[][], itemsToShow: number, total: number } {
   const itemsGroupedByPages: any[][] = []
   let page: any[] = []
   let currentPage = 1
@@ -23,5 +23,5 @@ export function groupByPages(pageSize:number, items: any[]) : { pages: any[][], 
     }
   }
 
-  return { pages: itemsGroupedByPages, total: totalItems }
+  return { pages: itemsGroupedByPages, itemsToShow: totalItems, total: 155 }
 }

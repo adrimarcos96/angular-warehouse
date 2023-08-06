@@ -1,39 +1,8 @@
 <div id="categoriesPage">
   <div class="container px-0">
     <div class="row mx-0">
-      <p class="totalCategoriesText px-0">Showing {{categoriesToShow}} of {{totalCategories}} categories</p>
+      <p class="totalCategoriesText px-0">Showing {{categoriesToShow}} of {{total}} categories</p>
     </div>
-    <div>
-      <ng-template ngFor let-page [ngForOf]="categoryPages" let-i="index">
-        <div class="row justify-content-center mx-0 categoriesPage">
-          <p class="text-center">- Page {{i + 1}} -</p>
-          <ng-template ngFor let-category [ngForOf]="page">
-            <!-- Desktop category card -->
-            <div class="card desktop-category-card col-md-3">
-              <a class="text-decoration-none h-100" href="/categories/{{category.id}}">
-                <img class="card-img-top category-image" src="{{category.image}}" alt="{{category.name}}">
-                <div class="card-body">
-                  <h5 class="categoryNameTxt">{{category.name}}</h5>
-                  <p class="txt">{{category.description}}<p>
-                </div>
-              </a>
-            </div>
-
-            <!-- Mobile category card -->
-            <a class="display-desktop-none text-decoration-none w-100 px-0 mb-2" href="/categories/{{category.id}}">
-              <div class="row card mobile-category-card w-100 mx-0">
-                <div class="mobile-card-image-container col-sm-2 h-100 px-0">
-                  <img class="card-img-top h-100 mobile-category-image" src="{{category.image}}" alt="{{category.name}}">
-                </div>
-                <div class="mobile-data-container col-8 px-0 ">
-                  <h6 class="categoryNameTxt">{{category.name}}</h6>
-                  <p class="txt">{{category.description}}</p>
-                </div>
-              </div>
-            </a>
-          </ng-template>
-        </div>
-      </ng-template>
-    </div>
+    <app-items-list listType="Category" [pageSize]="pageSize"></app-items-list>
   </div>
 </div>

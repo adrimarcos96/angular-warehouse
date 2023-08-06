@@ -1,27 +1,28 @@
 import { Component } from '@angular/core';
-import { Category } from '../../models/category';
 import { CommonModule } from '@angular/common';
+import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Category } from '../../models/category';
 import { CategoriesService } from "../../services";
+import { ItemsListComponent } from "../../components/items-list/items-list.component";
 
 @Component({
-  standalone: true,
-  imports: [CommonModule],
   selector: 'app-categories',
+  standalone: true,
+  imports: [CommonModule, RouterLink, RouterLinkActive, ItemsListComponent],
   templateUrl: './categories.component.html',
   styleUrls: ['./categories.component.scss']
 })
 
 export class CategoriesComponent {
-  pageSize = 6;
-  totalCategories = 155;
+  pageSize = 3;
   categoriesToShow = 0;
-  categoryPages: Category[][] = [];
+  total = 0;
 
   constructor(private categoriesService: CategoriesService) {}
 
   ngOnInit() {
-    const { pages, total } = this.categoriesService.getCategoriesByPages(this.pageSize);
-    this.categoryPages = pages;
-    this.categoriesToShow = total;
+    const { categoriesToShow, total } = this.categoriesService.getCategoriesByPages(0, this.pageSize);
+    this.categoriesToShow = categoriesToShow;
+    this.total = total;
   }
 }

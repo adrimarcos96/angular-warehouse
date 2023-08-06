@@ -1,0 +1,37 @@
+<div id="category-deatils">
+  <div class="row justify-content-center mx-0" *ngIf="isLoding; else categoryDetails"> Loding... </div>
+  <ng-template #categoryDetails>
+    <div class="container px-0" *ngIf="category">
+      <!-- Category details (name, description and image) -->
+      <!-- Desktop -->
+      <div class="desktop-category-header row mx-0 w-100 mb-4">
+        <div class="col-4 pl-0">
+          <img class="desktop-img-category w-100" src="assets/images/no-image.png" alt="Category Image">
+        </div>
+        <div class="col-8 pr-0">
+          <h5>{{category.name}}</h5>
+          <p>{{category.description}}</p>
+        </div>
+      </div>
+
+      <!-- Mobile -->
+      <div class="mobile-category-header">
+        <div class="mobile-img-container row w-100 justify-content-center mx-0 mb-2">
+          <img class="mobile-img-category h-100" src="assets/images/no-image.png" alt="Category Image">
+        </div>
+        <h6>{{category.name}}</h6>
+        <p class="text-justify">{{category.description}}</p>
+      </div>
+
+      <hr>
+
+      <div>
+        <h5 class="text-center">Items</h5>
+        <div class="row mx-0">
+            <p class="totalCategoriesText px-0">Showing {{itemsToShow}} of {{totalItems}} items</p>
+          </div>
+        <app-items-list listType="CategoryItems" [pageSize]="pageSize"></app-items-list>
+      </div>
+    </div>
+  </ng-template>
+</div>

@@ -94,4 +94,4 @@ export const categories: Category[] = [
     description: "Amarilla",
     image: 'assets/images/no-image.png'
   }
-]
+];
