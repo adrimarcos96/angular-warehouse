@@ -1,32 +1,35 @@
 <div class="row mx-0">
-  <ng-template ngFor let-page [ngForOf]="itemsPages" let-i="index">
-    <div class="row px-0 mx-0 categoriesPage">
-      <p class="text-center">- Page {{i + 1}} -</p>
-      <ng-template ngFor let-item [ngForOf]="page">
-        <!-- Desktop category card -->
-        <div class="card desktop-category-card col-md-3">
-          <a class="text-decoration-none h-100" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
-            <img class="card-img-top category-image" src="{{item.image}}" alt="{{item.name}}">
-            <div class="card-body">
-              <h5 class="categoryNameTxt">{{item.name}}</h5>
-              <p class="txt">{{item.description}}<p>
+  <p *ngIf="isLoading; else results" class="text-center">Loading results...</p>
+  <ng-template #results>
+    <ng-template  ngFor let-page [ngForOf]="itemsPages" let-i="index">
+      <div *ngIf="page && page.length > 0" class="row px-0 mx-0 categoriesPage">
+        <p class="text-center">- Page {{i + 1}} -</p>
+        <ng-template ngFor let-item [ngForOf]="page">
+          <!-- Desktop category card -->
+          <div class="card desktop-category-card col-md-3">
+            <a class="text-decoration-none h-100" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
+              <img class="card-img-top category-image" src="{{item.image}}" alt="{{item.name}}">
+              <div class="card-body">
+                <h5 class="categoryNameTxt">{{item.name}}</h5>
+                <p class="txt">{{item.description}}<p>
+              </div>
+            </a>
+          </div>
+
+          <!-- Mobile category card -->
+          <a class="display-desktop-none text-decoration-none w-100 px-0 mb-2" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
+            <div class="row card mobile-category-card w-100 mx-0">
+              <div class="mobile-card-image-container col-sm-2 h-100 px-0">
+                <img class="card-img-top h-100 mobile-category-image" src="{{item.image}}" alt="{{item.name}}">
+              </div>
+              <div class="mobile-data-container col-8 px-0 ">
+                <h6 class="categoryNameTxt">{{item.name}}</h6>
+                <p class="txt">{{item.description}}</p>
+              </div>
             </div>
           </a>
-        </div>
-
-        <!-- Mobile category card -->
-        <a class="display-desktop-none text-decoration-none w-100 px-0 mb-2" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
-          <div class="row card mobile-category-card w-100 mx-0">
-            <div class="mobile-card-image-container col-sm-2 h-100 px-0">
-              <img class="card-img-top h-100 mobile-category-image" src="{{item.image}}" alt="{{item.name}}">
-            </div>
-            <div class="mobile-data-container col-8 px-0 ">
-              <h6 class="categoryNameTxt">{{item.name}}</h6>
-              <p class="txt">{{item.description}}</p>
-            </div>
-          </div>
-        </a>
-      </ng-template>
-    </div>
+        </ng-template>
+      </div>
+    </ng-template>
   </ng-template>
-  </div>
+</div>

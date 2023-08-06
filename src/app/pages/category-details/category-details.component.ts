@@ -14,26 +14,29 @@ import { ItemsListComponent } from "../../components/items-list/items-list.compo
 })
 
 export class CategoryDetailsComponent {
+  categoryId=""
   isLoding = true;
   itemsToShow = 0;
   totalItems = 0;
   category: Category | undefined;
-  pageSize = 3;
+  pageSize = 5;
 
   constructor(private route: ActivatedRoute, private categoriesService: CategoriesService) {}
 
   ngOnInit() {
     const categoryId = this.route.snapshot.paramMap.get('id') || '';
-    const { category, totalItems} = this.categoriesService.getCategoryById(categoryId, 0, this.pageSize);
-
-    if (category) {
-      this.category = category;
-      this.itemsToShow = category.items && category.items.length ? category.items.length : 0
-      this.totalItems = totalItems
-    } else {
-      console.log('Redirecting to 404 page');
-    }
-
-    this.isLoding = false;
+    this.categoryId = categoryId
+    this.categoriesService.getCategoryById(categoryId, this.pageSize);
+    this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((response: any) => {
+      const category = response.category
+      if (category) {
+        this.category = category;
+        this.itemsToShow = category.items ? category.items.length : 0;
+        this.totalItems = response.totalItems;
+      } else {
+        console.log('Redirecting to 404 page');
+      }
+      this.isLoding = false;
+    });
   }
 }

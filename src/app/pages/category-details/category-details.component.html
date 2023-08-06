@@ -26,11 +26,11 @@
       <hr>
 
       <div>
-        <h5 class="text-center">Items</h5>
+        <h5 class="text-center">Products</h5>
         <div class="row mx-0">
             <p class="totalCategoriesText px-0">Showing {{itemsToShow}} of {{totalItems}} items</p>
           </div>
-        <app-items-list listType="CategoryItems" [pageSize]="pageSize"></app-items-list>
+        <app-items-list listType="CategoryItems" [pageSize]="pageSize" [id]="categoryId"></app-items-list>
       </div>
     </div>
   </ng-template>

@@ -13,28 +13,33 @@ import { groupByPages } from "../../utils/index.util";
 })
 
 export class ItemsListComponent {
+  isLoading = true;
   itemDeatilsBaseUrl = ''
   itemsPages: any[][] = [];
+  @Input() id = '';
   @Input() listType = '';
   @Input() pageSize = 9;
 
   constructor(private categoriesService: CategoriesService) {}
 
   ngOnInit() {
-    console.log(`Showing list fot type: ${this.listType}`);
+    console.log(`#### Showing list for type: ${this.listType}`);
     switch (this.listType) {
       case 'Category':
-        this.itemDeatilsBaseUrl = 'categories/'
-        this.itemsPages = this.categoriesService.categories.pages;
+        this.itemDeatilsBaseUrl = 'categories/';
+        this.categoriesService.getCategoriesDataUpdadateListener().subscribe((data: any) => {
+          this.itemsPages = data.pages;
+          this.isLoading = false;
+        });
         break;
 
       case 'CategoryItems':
-        this.itemDeatilsBaseUrl = 'products/'
-        if (this.categoriesService.category) {
-          const items = this.categoriesService.category.items || []
-          const { pages } = groupByPages(this.pageSize, items);
-          this.itemsPages = pages;
-        }
+        this.itemDeatilsBaseUrl = 'products/';
+        this.categoriesService.getCategoryById(this.id, this.pageSize);
+        this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((data: any) => {
+          this.itemsPages = [data.category.items];
+          this.isLoading = false;
+        });
         break;
 
       case 'Item':
