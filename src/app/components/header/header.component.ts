@@ -18,7 +18,7 @@ export class HeaderComponent {
       url: "#",
       sectionId: 'categoriesSection',
       options: [
-        { text: 'Show all categories', url: '#' },
+        { text: 'Show all categories', url: '/categories' },
         { text: 'Add a new category', url: '#' }
       ]
     },
@@ -27,7 +27,7 @@ export class HeaderComponent {
       url: "#",
       sectionId: 'productsSection',
       options: [
-        { text: 'Show all products', url: '#' },
+        { text: 'Show all products', url: '/products' },
         { text: 'Add a new product', url: '#' }
       ]
     }
@@ -51,12 +51,17 @@ export class HeaderComponent {
 
   openMobileMenu(mobileMenu: any) {
     this.mobileMenu = this.modalService.open(mobileMenu, { fullscreen: true, backdrop: false, windowClass: 'mobile-menu' });
-    this.isMobileMenuOpen = true
+    this.isMobileMenuOpen = true;
+  }
+
+  closeMobileMenu() {
+    this.mobileMenu.close();
+    this.isMobileMenuOpen = false
   }
 
   closeMobileMenuOnDesktop() {
     if (window.screen.width > 980 && this.isMobileMenuOpen && this.mobileMenu) {
-      this.mobileMenu.close()
+      this.mobileMenu.close();
     }
   }
 }

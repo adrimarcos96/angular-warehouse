@@ -1,8 +1,8 @@
 <nav class="navbar fixed-top my-navbar navbar-expand-sm navbar-dark bg-dark">
   <div class="container-fluid h-100 px-100 px-20-mobile header-container">
     <div class="navbar-brand text-center">
-      <a href="#"><img class="navbar-logo" src="assets/images/logo.png" alt="Logo.png" /></a>
-      <a href="#" class="logo-text mb-0">Warehouse</a>
+      <a routerLink="/categories"><img class="navbar-logo" src="assets/images/logo.png" alt="Logo.png" /></a>
+      <a routerLink="/categories" class="logo-text mb-0">Warehouse</a>
     </div>
 
     <!-- Desktop -->
@@ -18,7 +18,7 @@
               *ngIf="link.options.length === 0; else menuSection"
               id="{{link.sectionId}}"
               class="nav-link navbar-button"
-              href="{{link.url}}"
+              routerLink="{{link.url}}"
             >
               {{link.title}}
             </a>
@@ -38,7 +38,7 @@
               <ng-template ngFor let-option [ngForOf]="link.options" let-j="index">
                 <a
                   ngbDropdownItem
-                  href="{{option.url}}"
+                  routerLink="{{option.url}}"
                   (click)="$event.preventDefault()"
                   class="nav-dropdown-section-button"
                 >
@@ -61,7 +61,7 @@
         <div ngbAccordion [closeOthers]="true">
           <ng-template ngFor let-mobileLink [ngForOf]="links" let-i="index">
             <div ngbAccordionItem [destroyOnHide]="true" class="link-mobile-content">
-              <a hidden="{{mobileLink.options.length === 0 ? null : false }}" class="link-mobile-title accordion-button accordion-button-arrow-hidden" href="{{mobileLink.url}}">{{mobileLink.title}}</a>
+              <a hidden="{{mobileLink.options.length === 0 ? null : false }}" class="link-mobile-title accordion-button accordion-button-arrow-hidden" routerLink="{{mobileLink.url}}" (click)="closeMobileMenu()">{{mobileLink.title}}</a>
 
               <div hidden="{{mobileLink.options.length === 0 ? false : null }}">
                 <button ngbAccordionButton class="link-mobile-title">{{mobileLink.title}}</button>
@@ -69,7 +69,7 @@
                 <div ngbAccordionCollapse>
                   <div ngbAccordionBody class="pt-0">
                     <ng-template ngFor let-option [ngForOf]="mobileLink.options" let-j="index">
-                      <a href="{{option.url}}" class="mobile-link w-100">{{option.text}}</a>
+                      <a routerLink="{{option.url}}" class="mobile-link w-100" (click)="closeMobileMenu()">{{option.text}}</a>
                       <div *ngIf="mobileLink.options.length - 1  > j" class="horizontal-separator h-1px"></div>
                     </ng-template>
                   </div>
