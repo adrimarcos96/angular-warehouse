@@ -10,8 +10,11 @@
             <a class="text-decoration-none h-100" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
               <img class="card-img-top category-image" src="{{item.image}}" alt="{{item.name}}">
               <div class="card-body">
-                <h5 class="categoryNameTxt">{{item.name}}</h5>
-                <p class="txt">{{item.description}}<p>
+                <h5 class="categoryNameTxt"><b>{{item.name}}</b></h5>
+                <p *ngIf="listType === 'Product'; else description" class="txt"><b>Category:</b> {{item.category}}<p>
+                <ng-template #description>
+                  <p class="txt">{{item.description}}<p>
+                </ng-template>
               </div>
             </a>
           </div>
@@ -23,8 +26,11 @@
                 <img class="card-img-top h-100 mobile-category-image" src="{{item.image}}" alt="{{item.name}}">
               </div>
               <div class="mobile-data-container col-8 px-0 ">
-                <h6 class="categoryNameTxt">{{item.name}}</h6>
-                <p class="txt">{{item.description}}</p>
+                <h6 class="categoryNameTxt"><b>{{item.name}}</b></h6>
+                <p *ngIf="listType === 'Product'; else description" class="txt"><b>Category:</b> {{item.category}}<p>
+                <ng-template #description>
+                  <p class="txt">{{item.description}}<p>
+                </ng-template>
               </div>
             </div>
           </a>

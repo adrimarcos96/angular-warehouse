@@ -35,15 +35,15 @@ export class ProductsService {
             pageSize: response.pageSize,
             success: response.success,
             products: response.items.map((product: Product) => {
-                return {
-                  id: product.id,
-                  code: product.code,
-                  name: product.name,
-                  description: product.description,
-                  image: product.image || 'assets/images/no-image.png'
-                };
-              }
-            ),
+              return {
+                id: product.id,
+                code: product.code,
+                name: product.name,
+                category: product.category,
+                description: product.description,
+                image: product.image || 'assets/images/no-image.png'
+              };
+            }),
             productsToShow: response.items.length,
             total: response.total
           };
