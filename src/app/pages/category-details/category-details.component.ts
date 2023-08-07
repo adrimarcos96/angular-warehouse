@@ -47,6 +47,12 @@ export class CategoryDetailsComponent {
     }
   }
 
+  createNewProduct() {
+    if (this.category) {
+      console.log(`Creating a new product for category: ${this.category.id}`);
+    }
+  }
+
   deleteCategory() {
     if (this.category) {
       console.log(`Removing category: ${this.category.id}`);

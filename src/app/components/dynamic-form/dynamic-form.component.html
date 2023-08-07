@@ -40,8 +40,8 @@
           </div>
         </div>
       </ng-template>
-      <div class="product-button-container px-0">
-        <!-- product form modal -->
+      <div *ngIf="action === 'create' && formType === 'Category'" class="product-button-container px-0">
+        <!-- Product form modal -->
         <ng-template #productFormModal let-modal class="product-form-modal">
           <div class="modal-header mobile-menu-header">
             <h5>Create product</h5>
