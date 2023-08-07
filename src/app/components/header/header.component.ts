@@ -19,7 +19,7 @@ export class HeaderComponent {
       sectionId: 'categoriesSection',
       options: [
         { text: 'Show all categories', url: '/categories' },
-        { text: 'Add a new category', url: '#' }
+        { text: 'Add a new category', url: '/categories/create' }
       ]
     },
     {

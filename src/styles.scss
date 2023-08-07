@@ -1,5 +1,6 @@
 /* Importing Bootstrap SCSS file. */
 @import 'bootstrap/scss/bootstrap';
+@import 'assets/styles/global-variables';
 
 .px-100 {
   padding-left: 100px;
@@ -30,4 +31,12 @@
 
 .text-justify {
   text-align: justify;
+}
+
+// Desktop
+@media screen and (min-width: $min-desktop-screen-size) {
+  .mx-20px-desktop {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
 }

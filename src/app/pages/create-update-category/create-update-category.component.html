@@ -1,0 +1,17 @@
+<div id="category-create-update">
+  <div class="row justify-content-center mx-0" *ngIf="isLoading; else categoryForm"> Loading... </div>
+  <ng-template #categoryForm>
+    <div class="form-title-container row mx-0 justify-content-center px-0">
+      <h5 class="form-title text-center" *ngIf="action === 'create'; else updateTitle">Create category</h5>
+      <ng-template #updateTitle>
+        <h5 class="form-title text-center">Update category</h5>
+      </ng-template>
+    </div>
+
+    <div class="row mx-0 justify-content-center px-0">
+      <div class="category-form px-0">
+        <app-dynamic-form [action]="action" [formType]="formType" [formFields]="formFields"></app-dynamic-form>
+      </div>
+    </div>
+  </ng-template>
+</div>

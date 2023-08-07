@@ -1,0 +1,220 @@
+<div id="dynamic-form" class="mb-4">
+  <form [formGroup]="formGroup" (ngSubmit)="onSubmit()">
+    <div class="form-fields row mx-0 mb-3">
+      <ng-template ngFor let-formField [ngForOf]="formFields">
+        <div class="form-control-container px-0 mb-4">
+          <div class="w-100 mb-2">
+            <label class="dynamic-form-label" for="{{formField.property}}">{{formField.label}}</label>
+          </div>
+          <div [ngSwitch]="formField.type" class="w-100">
+            <input
+              *ngSwitchCase="'text'"
+              id="input-{{formField.property}}"
+              class="dynamic-form-input form-control"
+              type="{{formField.type}}"
+              placeholder="{{formField.placeholder}}"
+              formControlName="{{formField.property}}"
+            />
+            <textarea
+              *ngSwitchCase="'textarea'"
+              id="input-{{formField.property}}"
+              class="dynamic-form-textarea form-control"
+              placeholder="{{formField.placeholder}}"
+              formControlName="{{formField.property}}"
+              rows="3"
+            ></textarea>
+          </div>
+          <div
+            *ngIf="getFormControl(formField.property)?.invalid && (getFormControl(formField.property)?.dirty || getFormControl(formField.property)?.touched)"
+            class="error-message-container mt-2"
+          >
+            <p class="mb-0" *ngIf="getFormControl(formField.property)?.errors?.['required']">
+              {{formField.label}} is required.
+            </p>
+            <p class="mb-0" *ngIf="getFormControl(formField.property)?.errors?.['minlength']">
+              {{formField.label}} must be more longer.
+            </p>
+            <p class="mb-0" *ngIf="getFormControl(formField.property)?.errors?.['maxlength']">
+              {{formField.label}} must be more little.
+            </p>
+          </div>
+        </div>
+      </ng-template>
+      <div class="product-button-container px-0">
+        <!-- product form modal -->
+        <ng-template #productFormModal let-modal class="product-form-modal">
+          <div class="modal-header mobile-menu-header">
+            <h5>Create product</h5>
+            <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+          </div>
+          <div class="modal-body products-form-container">
+            <form [formGroup]="productFormGroup">
+              <div class="form-control-container px-0 mb-4">
+                <!-- Input name -->
+                <div class="w-100 mb-2">
+                  <label class="dynamic-form-label" for="name">Name</label>
+                </div>
+                <div class="w-100 mb-2">
+                  <input
+                    id="product-name"
+                    class="dynamic-form-input form-control"
+                    type="text"
+                    placeholder="Product name"
+                    formControlName="name"
+                  />
+                </div>
+                <div
+                  *ngIf="getProductFormControl('name')?.invalid && (getProductFormControl('name')?.dirty || getProductFormControl('name')?.touched)"
+                  class="error-message-container mb-2"
+                >
+                  <p class="mb-0" *ngIf="getProductFormControl('name')?.errors?.['required']">
+                    Name is required.
+                  </p>
+                  <p class="mb-0" *ngIf="getProductFormControl('name')?.errors?.['minlength']">
+                    Name must be more longer.
+                  </p>
+                </div>
+
+                <!-- Input code -->
+                <div class="w-100 mb-2">
+                  <label class="dynamic-form-label" for="code">Code</label>
+                </div>
+                <div class="w-100 mb-2">
+                  <input
+                    id="product-code"
+                    class="dynamic-form-input form-control"
+                    type="text"
+                    placeholder="Product code"
+                    formControlName="code"
+                  />
+                </div>
+                <div
+                  *ngIf="getProductFormControl('code')?.invalid && (getProductFormControl('code')?.dirty || getProductFormControl('code')?.touched)"
+                  class="error-message-container mb-2"
+                >
+                  <p class="mb-0" *ngIf="getProductFormControl('code')?.errors?.['required']">
+                    Product code is required.
+                  </p>
+                  <p class="mb-0" *ngIf="getProductFormControl('code')?.errors?.['minlength']">
+                    Product code must be more longer.
+                  </p>
+                </div>
+
+                <!-- Input default price -->
+                <div class="w-100 mb-2">
+                  <label class="dynamic-form-label" for="defaultPrice">Default price</label>
+                </div>
+                <div class="w-100 mb-2">
+                  <input
+                    id="product-price"
+                    class="dynamic-form-input form-control"
+                    type="text"
+                    placeholder="Product price"
+                    formControlName="defaultPrice"
+                  />
+                </div>
+                <div
+                  *ngIf="getProductFormControl('defaultPrice')?.invalid && (getProductFormControl('defaultPrice')?.dirty || getProductFormControl('defaultPrice')?.touched)"
+                  class="error-message-container mb-2"
+                >
+                  <p class="mb-0" *ngIf="getProductFormControl('defaultPrice')?.errors?.['required']">
+                    Default price is required.
+                  </p>
+                  <p class="mb-0" *ngIf="getProductFormControl('defaultPrice')?.errors?.['min']">
+                    Default price must be greater than 0.
+                  </p>
+                </div>
+
+                <!-- Input default cost -->
+                <div class="w-100 mb-2">
+                  <label class="dynamic-form-label" for="code">Default cost</label>
+                </div>
+                <div class="w-100 mb-2">
+                  <input
+                    id="product-cost"
+                    class="dynamic-form-input form-control"
+                    type="text"
+                    placeholder="Product cost"
+                    formControlName="defaultCost"
+                  />
+                </div>
+                <div
+                  *ngIf="getProductFormControl('defaultCost')?.invalid && (getProductFormControl('defaultCost')?.dirty || getProductFormControl('defaultCost')?.touched)"
+                  class="error-message-container mb-2"
+                >
+                  <p class="mb-0" *ngIf="getProductFormControl('defaultCost')?.errors?.['required']">
+                    Default cost is required.
+                  </p>
+                  <p class="mb-0" *ngIf="getProductFormControl('defaultCost')?.errors?.['min']">
+                    Default cost must be greater than 0.
+                  </p>
+                </div>
+
+                <!-- Input description -->
+                <div class="w-100 mb-2">
+                  <label class="dynamic-form-label" for="code">Description</label>
+                </div>
+                <div class="w-100 mb-2">
+                  <textarea
+                    id="product-cost"
+                    class="dynamic-form-input form-control"
+                    placeholder="Description"
+                    formControlName="description"
+                    rows="3"
+                  ></textarea>
+                </div>
+                <div
+                  *ngIf="getProductFormControl('description')?.invalid && (getProductFormControl('description')?.dirty || getProductFormControl('description')?.touched)"
+                  class="error-message-container mb-2"
+                >
+                  <p class="mb-0" *ngIf="getProductFormControl('description')?.errors?.['required']">
+                    Description is required.
+                  </p>
+                  <p class="mb-0" *ngIf="getProductFormControl('description')?.errors?.['minlength']">
+                    Description must be more longer.
+                  </p>
+                </div>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer moddal-submit-button-container justify-content-center row mx-0">
+            <button class="dynamic-form-submit-button btn btn-lg btn-primary" (click)="addProduct()" [disabled]="!productFormGroup.valid">Submit</button>
+          </div>
+        </ng-template>
+        <button class="dynamic-form-product-button btn btn-success" (click)="openProductFormModal(productFormModal)">Add a new product</button>
+      </div>
+    </div>
+
+    <div class="moddal-submit-button-container justify-content-center row mx-0">
+      <button class="dynamic-form-submit-button btn btn-lg btn-primary" type="submit" [disabled]="!formGroup.valid">Submit</button>
+    </div>
+  </form>
+
+</div>
+
+<div *ngIf="action === 'create' && formType === 'Category'" class="container px-0">
+  <h5 class="text-center">Products</h5>
+  <div class="products-to-create row mx-0 justify-content-center w-100">
+    <ng-template ngFor let-product [ngForOf]="productsToAdd" let-i="index">
+      <div  class="product-row row mx-0">
+        <!-- Desktop -->
+        <div class="desktop col-6 pt-10px">{{product.name}}</div>
+        <!-- Mobile -->
+        <div class="mobile col-9 pt-10px">{{product.name}}</div>
+
+        <!-- Desktop -->
+        <div class="desktop col-4 pt-10px">{{product.code}}</div>
+
+        <!-- Desktop -->
+        <div class="desktop col-2 pt-5px">
+          <button class="delete button btn btn-danger" (click)="deleteProduct(product.id)">Delete</button>
+        </div>
+        <!-- Mobile -->
+        <div class="mobile col-3 pt-5px">
+          <button class="delete button btn btn-danger" (click)="deleteProduct(product.id)">Delete</button>
+        </div>
+      </div>
+    </ng-template>
+    <p *ngIf="productsToAdd.length === 0" class="text-center">No products for this category</p>
+  </div>
+</div>
