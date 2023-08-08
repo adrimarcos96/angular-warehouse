@@ -1,3 +1,4 @@
+import axios from "axios";
 import { environment } from "../../environments/environment";
 
 export const serverUrls = {
@@ -7,3 +8,9 @@ export const serverUrls = {
   getProductDetails: environment.backendUrl +'/Item',
 
 };
+
+export const http = axios.create({
+  baseURL: environment.backendUrl,
+  timeout: 10000,
+  headers: { 'Content-Type': 'application/json' }
+});
