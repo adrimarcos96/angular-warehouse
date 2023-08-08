@@ -95,6 +95,9 @@
                   <p class="mb-0" *ngIf="getProductFormControl('code')?.errors?.['required']">
                     Product code is required.
                   </p>
+                  <p class="mb-0" *ngIf="getProductFormControl('code')?.errors?.['maxlength']">
+                    Product code must 10 characters or less.
+                  </p>
                   <p class="mb-0" *ngIf="getProductFormControl('code')?.errors?.['minlength']">
                     Product code must be more longer.
                   </p>
@@ -178,10 +181,10 @@
             </form>
           </div>
           <div class="modal-footer moddal-submit-button-container justify-content-center row mx-0">
-            <button class="dynamic-form-submit-button btn btn-lg btn-primary" (click)="addProduct()" [disabled]="!productFormGroup.valid">Submit</button>
+            <button type="button" class="dynamic-form-submit-button btn btn-lg btn-primary" (click)="addProduct()" [disabled]="!productFormGroup.valid">Add product</button>
           </div>
         </ng-template>
-        <button class="dynamic-form-product-button btn btn-success" (click)="openProductFormModal(productFormModal)">Add a new product</button>
+        <button type="button" class="dynamic-form-product-button btn btn-success" (click)="openProductFormModal(productFormModal)">Add a new product</button>
       </div>
     </div>
 
@@ -189,7 +192,6 @@
       <button class="dynamic-form-submit-button btn btn-lg btn-primary" type="submit" [disabled]="!formGroup.valid">Submit</button>
     </div>
   </form>
-
 </div>
 
 <div *ngIf="action === 'create' && formType === 'Category'" class="container px-0">

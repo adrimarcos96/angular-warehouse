@@ -81,6 +81,33 @@ export class ProductsService {
     }
   }
 
+  async createProduct(data: Product) {
+    try {
+      const { data: productResponse } = await http.post(serverUrls.getProductDetails, data);
+
+      if (productResponse.success) {
+        const newProduct: Product = {
+          id: productResponse.data.id,
+          name: productResponse.data.name,
+          code: productResponse.data.code,
+          defaultPrice: productResponse.data.defaultPrice,
+          defaultCost: productResponse.data.defaultCost,
+          description: productResponse.data.description,
+          category: productResponse.data.category,
+          image: productResponse.data.image || 'assets/images/no-image.png',
+        };
+
+        return { error: false, newProduct };
+      } else {
+        console.error(`Error creating product. ${productResponse.message}`);
+        return { error: true };
+      }
+    } catch (error) {
+      console.error(`Error creating product`, error);
+      return { error: true };
+    }
+  }
+
   // Maps
    mapProductsData(products: any[]): Product[] {
     if (products && products.length > 0) {

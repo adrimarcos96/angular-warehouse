@@ -10,25 +10,29 @@ import { Product } from "../../models/product";
 })
 export class CategoriesService {
   categoriesData: any = {
+    error: false,
     page: 0,
     pages: [],
     categoriesToShow: 0,
     total: 0
   }
   categoryDetails: any = {
+    error: false,
     category: null,
     productsPage: 0,
     totalProducts: 0,
     productsToShow: 0
   }
 
-  private categoriesDataUpdated = new BehaviorSubject<{ pages: any; categoriesToShow: number; page: number; total: number }>({
+  private categoriesDataUpdated = new BehaviorSubject<{ error: boolean, pages: any; categoriesToShow: number; page: number; total: number }>({
+    error: false,
     pages: [],
     categoriesToShow: 0,
     page: 0,
     total: 0
   });
-  private categoryDetailsUpdated = new BehaviorSubject<{ category: Category|null; productsPage: number; totalProducts: number; productsToShow: number }>({
+  private categoryDetailsUpdated = new BehaviorSubject<{ error: boolean; category: Category|null; productsPage: number; totalProducts: number; productsToShow: number }>({
+    error: false,
     category: null,
     productsPage: 0,
     totalProducts: 0,
@@ -49,22 +53,28 @@ export class CategoriesService {
 
       if (categoryResponse.success) {
         const categories: Category[] = this.mapCategoriesData(categoryResponse.items);
-        const page = categoryResponse.pageNo;
-        const total = categoryResponse.total;
-        const { pages, categoriesToShow } = this.getCategoriesByPages(page, categories);
 
-        this.categoriesData = {
-          pages,
-          categoriesToShow,
-          page,
-          total
-        };
-        this.categoriesDataUpdated.next(this.categoriesData);
+        if (categories.length > 0) {
+          const page = categoryResponse.pageNo;
+          const total = categoryResponse.total;
+          const { pages, categoriesToShow } = this.getCategoriesByPages(page, categories);
+
+          this.categoriesData = {
+            error: false,
+            pages,
+            categoriesToShow,
+            page,
+            total
+          };
+          this.categoriesDataUpdated.next(this.categoriesData);
+        }
       } else {
         console.error('Error getting categories');
+        this.categoriesDataUpdated.next({ ...this.categoriesData, error: true });
       }
     } catch (error) {
       console.error('Error getting categories', requestBody, error);
+      this.categoriesDataUpdated.next({ ...this.categoriesData, error: true });
     }
   }
 
@@ -96,6 +106,7 @@ export class CategoriesService {
           category.products = this.mapProducts(itemsResponse.items);
 
           this.categoryDetails = {
+            error: false,
             category,
             productsPage,
             totalProducts,
@@ -103,14 +114,85 @@ export class CategoriesService {
           };
           this.categoryDetailsUpdated.next(this.categoryDetails);
         } else {
+          this.categoryDetailsUpdated.next({ ...this.categoryDetails, error: true});
           console.error('Error getting products for category:', category.name);
         }
       } else {
         console.log('Error getting category by id:', categoryId, 'Request did not success');
+        this.categoryDetailsUpdated.next({ ...this.categoryDetails, error: true});
       }
     } catch (error) {
       console.log('Error getting category by id:', categoryId, error);
+      this.categoryDetailsUpdated.next({ ...this.categoryDetails, error: true});
     }
+  }
+
+  async updateCategory(categoryId: string, dataToUpdate: any) {
+    try {
+      const { data: categoryResponse } = await http.put(`${serverUrls.getCategoryDetails}/${categoryId}`, dataToUpdate);
+
+      if (categoryResponse.success) {
+        const categoryUpdated: Category = {
+          id: categoryResponse.data.id,
+          name: categoryResponse.data.name,
+          description: categoryResponse.data.description,
+          image: categoryResponse.data.image || 'assets/images/no-image.png',
+        };
+
+        return { error: false, categoryUpdated };
+      } else {
+        console.error(`Error updating catgory: ${categoryId}. ${categoryResponse.message}`);
+        return { error: true };
+      }
+    } catch (error) {
+      console.error(`Error updating catgory: ${categoryId}`, error);
+      return { error: true };
+    }
+  }
+
+  async createCategory(data: any) {
+    try {
+      const { data: categoryResponse } = await http.post(serverUrls.getCategoryDetails, data);
+
+      if (categoryResponse.success) {
+        const newCategory: Category = {
+          id: categoryResponse.data.id,
+          name: categoryResponse.data.name,
+          description: categoryResponse.data.description,
+          image: categoryResponse.data.image || 'assets/images/no-image.png',
+        };
+
+        return { error: false, newCategory };
+      } else {
+        console.error(`Error creating catgory. ${categoryResponse.message}`);
+        return { error: true };
+      }
+    } catch (error) {
+      console.error(`Error creating category`, error);
+      return { error: true };
+    }
+  }
+
+  clearCategoriesData() {
+    this.categoriesData = {
+      error: false,
+      page: 0,
+      pages: [],
+      categoriesToShow: 0,
+      total: 0
+    };
+    this.categoriesDataUpdated.next(this.categoriesData);
+  }
+
+  clearCategoryDetails() {
+    this.categoryDetails = {
+      error: false,
+      category: null,
+      productsPage: 0,
+      totalProducts: 0,
+      productsToShow: 0
+    };
+    this.categoryDetailsUpdated.next(this.categoryDetails);
   }
 
   getCategoriesDataUpdadateListener() {

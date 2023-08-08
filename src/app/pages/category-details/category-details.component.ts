@@ -4,6 +4,7 @@ import { CategoriesService } from "../../services";
 import { Category } from '../../models/category';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ItemsListComponent } from "../../components/items-list/items-list.component";
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-category-details',
@@ -15,11 +16,13 @@ import { ItemsListComponent } from "../../components/items-list/items-list.compo
 
 export class CategoryDetailsComponent {
   categoryId = '';
+  error = false;
   isLoading = true;
   productsToShow = 0;
   totalProducts = 0;
   category: Category | undefined;
   pageSize = 5;
+  categoryDetailsSubscription: Subscription | undefined;
 
   constructor(private route: ActivatedRoute, private router: Router, private categoriesService: CategoriesService) {}
 
@@ -27,15 +30,27 @@ export class CategoryDetailsComponent {
     const categoryId = this.route.snapshot.paramMap.get('id') || '';
     this.categoryId = categoryId
     this.categoriesService.getCategoryById(categoryId, this.pageSize);
-    this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((response: any) => {
+    this.categoryDetailsSubscription = this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((response: any) => {
       const category = response.category
       if (category) {
         this.category = category;
         this.productsToShow = response.productsToShow;
         this.totalProducts = response.totalProducts;
+        this.isLoading = false;
       }
-      this.isLoading = false;
+
+      if (response.error) {
+        this.isLoading = false;
+        this.error = true;
+      }
     });
+  }
+
+  ngOnDestroy() {
+    if (this.categoryDetailsSubscription) {
+      this.categoryDetailsSubscription.unsubscribe();
+      this.categoriesService.clearCategoryDetails();
+    }
   }
 
   updateCategory() {

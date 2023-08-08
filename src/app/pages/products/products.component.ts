@@ -13,7 +13,7 @@ import { ProductsService } from "../../services";
 })
 export class ProductsComponent {
   currentPage = 0;
-  pageSize = 5;
+  pageSize = 6;
   productsToShow = 0;
   total = 0;
 

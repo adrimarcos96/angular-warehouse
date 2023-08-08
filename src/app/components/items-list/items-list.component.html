@@ -6,7 +6,7 @@
         <p class="text-center">- Page {{i + 1}} -</p>
         <ng-template ngFor let-item [ngForOf]="page">
           <!-- Desktop category card -->
-          <div class="card desktop-category-card col-md-3">
+          <div id="desktop-item-{{item.id}}" class="card desktop-category-card col-md-3">
             <a class="text-decoration-none h-100" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
               <img class="card-img-top category-image" src="{{item.image}}" alt="{{item.name}}">
               <div class="card-body">
@@ -20,7 +20,7 @@
           </div>
 
           <!-- Mobile category card -->
-          <a class="display-desktop-none text-decoration-none w-100 px-0 mb-2" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
+          <a  id="mobile-item-{{item.id}}" class="display-desktop-none text-decoration-none w-100 px-0 mb-2" routerLink="/{{itemDeatilsBaseUrl}}/{{item.id}}">
             <div class="row card mobile-category-card w-100 mx-0">
               <div class="mobile-card-image-container col-sm-2 h-100 px-0">
                 <img class="card-img-top h-100 mobile-category-image" src="{{item.image}}" alt="{{item.name}}">

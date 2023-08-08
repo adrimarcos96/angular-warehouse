@@ -12,5 +12,8 @@ export const serverUrls = {
 export const http = axios.create({
   baseURL: environment.backendUrl,
   timeout: 10000,
-  headers: { 'Content-Type': 'application/json' }
+  headers: {
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  }
 });

@@ -14,7 +14,7 @@ import { ItemsListComponent } from "../../components/items-list/items-list.compo
 
 export class CategoriesComponent {
   currentPage = 0;
-  pageSize = 5;
+  pageSize = 4;
   categoriesToShow = 0;
   total = 0;
 

@@ -6,6 +6,7 @@ import { CategoriesService } from '../../services';
 import { Category } from '../../models/category';
 import { DynamicFormComponent } from "../../components/dynamic-form/dynamic-form.component";
 import { Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-create-update-category',
@@ -16,8 +17,10 @@ import { Validators } from '@angular/forms';
 })
 export class CreateUpdateCategoryComponent {
   isLoading = true;
+  error = false;
   action = ''
   categoryId = '';
+  category: Category | null | undefined;
   productsPageSize = 5;
   formType = 'Category';
   formFields = [
@@ -46,18 +49,21 @@ export class CreateUpdateCategoryComponent {
       required: true
     }
   ];
+  categoryDetailsSubscription: Subscription | undefined;
 
   constructor(private route: ActivatedRoute, private categoriesService: CategoriesService) { }
 
   ngOnInit() {
     const categoryId = this.route.snapshot.paramMap.get('id') || '';
-    this.categoryId = categoryId
+    this.categoryId = categoryId;
     if (categoryId) {
       this.action = 'update';
       this.categoriesService.getCategoryById(categoryId, this.productsPageSize);
-      this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((response: any) => {
-        const category: Category = response.category
+      this.categoryDetailsSubscription = this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((response: any) => {
+        const category = response.category;
+
         if (category) {
+          this.category = category;
           this.formFields = [
             {
               type: 'text',
@@ -83,14 +89,24 @@ export class CreateUpdateCategoryComponent {
               required: true
             }
           ];
-        } else {
-          console.log('Cataegory not found. Redirecting to 404 page ...');
+          this.isLoading = false;
         }
-        this.isLoading = false;
+
+        if (response.error) {
+          this.isLoading = false;
+          this.error = true;
+        }
       });
     } else {
       this.action = 'create';
       this.isLoading = false;
+    }
+  }
+
+  ngOnDestroy() {
+    if (this.categoryDetailsSubscription) {
+      this.categoryDetailsSubscription.unsubscribe();
+      this.categoriesService.clearCategoryDetails();
     }
   }
 }

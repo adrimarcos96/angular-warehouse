@@ -1,6 +1,7 @@
 <div id="category-deatils">
-  <div class="row justify-content-center mx-0" *ngIf="isLoading; else categoryDetails"> Loading... </div>
-  <ng-template #categoryDetails>
+  <div class="row justify-content-center mx-0" *ngIf="isLoading">Loading...</div>
+  <div class="row justify-content-center mx-0" *ngIf="error">Error loading data</div>
+  <ng-template [ngIf]="!isLoading && !error && category">
     <div class="container px-0" *ngIf="category">
       <!-- Desktop category details (name, description and image) -->
       <div class="desktop-category-header row mx-0 w-100 mb-4">
