@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
-import { Subject } from "rxjs";
-import { map, switchMap } from "rxjs/operators";
-import { serverUrls } from "../../config/httpConfig";
+import { BehaviorSubject } from "rxjs";
+import { http, serverUrls } from "../../config/httpConfig";
 
 import { Category } from "../../models/category";
 import { Product } from "../../models/product";
@@ -11,132 +9,166 @@ import { Product } from "../../models/product";
   providedIn: 'root'
 })
 export class CategoriesService {
-  categoryDetails: any = {
-    success: true,
-    category: null,
-    itemsPage: 0,
-    totalItems: 0
-  }
-
-  private categoryDetailsUpdated = new Subject<{ success: boolean; category: Category|null; itemsPage: number; totalItems: number; }>();
-
   categoriesData: any = {
     page: 0,
     pages: [],
     categoriesToShow: 0,
     total: 0
   }
+  categoryDetails: any = {
+    category: null,
+    productsPage: 0,
+    totalProducts: 0,
+    productsToShow: 0
+  }
 
-  private categoriesDataUpdated = new Subject<{ pages: any; categoriesToShow: number; page: number; total: number; }>();
+  private categoriesDataUpdated = new BehaviorSubject<{ pages: any; categoriesToShow: number; page: number; total: number }>({
+    pages: [],
+    categoriesToShow: 0,
+    page: 0,
+    total: 0
+  });
+  private categoryDetailsUpdated = new BehaviorSubject<{ category: Category|null; productsPage: number; totalProducts: number; productsToShow: number }>({
+    category: null,
+    productsPage: 0,
+    totalProducts: 0,
+    productsToShow: 0
+  });
 
-  constructor(private http: HttpClient) { }
+  constructor() { }
 
-  getCategoriesByPages(page: number, pageSize: number) {
+  async getCategories(page: number, pageSize: number) {
     const requestBody = {
       pageNo: page,
       pageSize: pageSize,
       filters: [{ Alias: "IsActive", Value: "True"}]
     };
 
-    this.http.post(serverUrls.searchCategories, requestBody)
-      .pipe(
-        map((response: any) => {
-          return {
-            page: response.pageNo,
-            pageSize: response.pageSize,
-            success: response.success,
-            categories: response.items.map((category: Category) => {
-                return {
-                  id: category.id,
-                  name: category.name,
-                  description: category.description,
-                  image: category.image || 'assets/images/no-image.png'
-                };
-              }
-            ),
-            categoriesToShow: response.items.length,
-            total: response.total
-          };
-        })
-      )
-      .subscribe((transformedResponse: any) => {
-        let pages = []
-        if (this.categoriesData.pages.length > 0 && transformedResponse.page === this.categoriesData.page) {
-          pages = this.categoriesData.pages.map((page: any, index: number) => {
-            if (index === transformedResponse.page) {
-              return transformedResponse.categories;
-            }
+    try {
+      const { data: categoryResponse } = await http.post(serverUrls.searchCategories, requestBody);
 
-            return page;
-          });
-        } else {
-          pages = [...this.categoriesData.pages, transformedResponse.categories];
-        }
+      if (categoryResponse.success) {
+        const categories: Category[] = this.mapCategoriesData(categoryResponse.items);
+        const page = categoryResponse.pageNo;
+        const total = categoryResponse.total;
+        const { pages, categoriesToShow } = this.getCategoriesByPages(page, categories);
 
         this.categoriesData = {
-          pages: pages,
-          categoriesToShow: transformedResponse.categoriesToShow,
-          page: transformedResponse.page,
-          total: transformedResponse.total
+          pages,
+          categoriesToShow,
+          page,
+          total
+        };
+        this.categoriesDataUpdated.next(this.categoriesData);
+      } else {
+        console.error('Error getting categories');
+      }
+    } catch (error) {
+      console.error('Error getting categories', requestBody, error);
+    }
+  }
+
+  async getCategoryById(categoryId: string, itemsPageSize: number) {
+    try {
+      const  { data: categoryResponse } = await http.post(`${serverUrls.getCategoryDetails}/${categoryId}`, {});
+
+      if (categoryResponse.success) {
+        const category: Category = {
+          id: categoryResponse.data.id,
+          name: categoryResponse.data.name,
+          description: categoryResponse.data.description,
+          image: categoryResponse.data.image || 'assets/images/no-image.png'
+        };
+
+        const { data: itemsResponse } = await http.post(serverUrls.searchProducts, {
+          pageNo: 0,
+          pageSize: itemsPageSize,
+          filters: [
+            { Alias: "IsActive", Value: "True" },
+            { Alias: "CategoryName", Value: category.name }
+          ]
+        });
+
+        if (itemsResponse.success) {
+          const productsPage = itemsResponse.pageNo;
+          const totalProducts = itemsResponse.total;
+          const productsToShow = itemsResponse.items ? itemsResponse.items.length : 0;
+          category.products = this.mapProducts(itemsResponse.items);
+
+          this.categoryDetails = {
+            category,
+            productsPage,
+            totalProducts,
+            productsToShow
+          };
+          this.categoryDetailsUpdated.next(this.categoryDetails);
+        } else {
+          console.error('Error getting products for category:', category.name);
         }
-        this.categoriesDataUpdated.next(this.categoriesData)
-      });
+      } else {
+        console.log('Error getting category by id:', categoryId, 'Request did not success');
+      }
+    } catch (error) {
+      console.log('Error getting category by id:', categoryId, error);
+    }
   }
 
   getCategoriesDataUpdadateListener() {
-    return this.categoriesDataUpdated.asObservable();
-  }
-
-  getCategoryById(categoryId: string, itemsPageSize: number) {
-    this.http.post(`${serverUrls.getCategoryDetails}/${categoryId}`, {})
-      .pipe(
-        switchMap((response: any) => {
-          return this.http.post(
-            serverUrls.searchProducts,
-            {
-              pageNo: 0,
-              pageSize: itemsPageSize,
-              filters: [
-                { Alias: "IsActive", Value: "True"},
-                { Alias: "CategoryName", Value: response.data.name}
-              ]
-            })
-          .pipe(
-            map((itemsResponse: any) => {
-              return {
-                success: itemsResponse.success,
-                page: itemsResponse.pageNo,
-                totalProducts: itemsResponse.total,
-                productsToShow: itemsResponse.items ? itemsResponse.items.length : 0,
-                category: {
-                  id: response.data.id,
-                  name: response.data.name,
-                  description: response.data.description,
-                  products: itemsResponse.items.map((product: Product) => {
-                    return {
-                      ...product,
-                      image: product.image || 'assets/images/no-image.png'
-                    }
-                  })
-                }
-              };
-            })
-          )
-        })
-      )
-      .subscribe((transformedCategoryDetails: any) => {
-        this.categoryDetails = {
-          success: transformedCategoryDetails.success,
-          category: transformedCategoryDetails.category,
-          itemsPage: transformedCategoryDetails.page,
-          totalProducts: transformedCategoryDetails.totalProducts,
-          productsToShow: transformedCategoryDetails.productsToShow
-        }
-        this.categoryDetailsUpdated.next(this.categoryDetails)
-      });
+    return this.categoriesDataUpdated;
   }
 
   getCategoryDetailsUpdadateListener() {
-    return this.categoryDetailsUpdated.asObservable();
+    return this.categoryDetailsUpdated;
+  }
+
+  // Maps
+  mapCategoriesData(categories: any[]): Category[] {
+    if (categories && categories.length > 0) {
+      return categories.map((category: any) => {
+        return {
+          id: category.id,
+          name: category.name,
+          description: category.description,
+          image: category.image || 'assets/images/no-image.png'
+        };
+      });
+    }
+
+    return [];
+  }
+
+  getCategoriesByPages(currentPage: number, categories: Category[]) {
+    let pages: Category[][] = [];
+    let categoriesToShow = 0;
+
+    if (this.categoriesData.pages.length > 0 && currentPage === this.categoriesData.page) {
+      this.categoriesData.pages.forEach((page: Category[], index: number) => {
+        if (index === currentPage) {
+          categoriesToShow += categories.length;
+          pages.push(categories);
+        } else {
+          categoriesToShow += page.length;
+          pages.push(page);
+        }
+      });
+    } else {
+      categoriesToShow = this.categoriesData.categoriesToShow + categories.length
+      pages = [...this.categoriesData.pages, categories];
+    }
+
+    return { pages, categoriesToShow };
+  }
+
+  mapProducts(data: any): Product[] {
+    return data.map((product: any) => {
+      return {
+        id: product.id,
+        code: product.code,
+        name: product.name,
+        category: product.category,
+        description: product.description,
+        image: product.image || 'assets/images/no-image.png'
+      };
+    });
   }
 }

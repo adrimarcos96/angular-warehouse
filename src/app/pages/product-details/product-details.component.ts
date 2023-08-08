@@ -15,16 +15,14 @@ import { Product } from '../../models/product'
 
 export class ProductDetailsComponent {
   isLoading = true;
-  product: Product | undefined;
+  product: Product | null | undefined;
 
   constructor(private route: ActivatedRoute, private productsService: ProductsService) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     const productId = this.route.snapshot.paramMap.get('id') || '';
-    this.productsService.getProductById(productId).subscribe((data: any) => {
-      this.product = data.product;
-      this.isLoading = false;
-    });
+    this.product = await this.productsService.getProductById(productId);
+    this.isLoading = false;
   }
 
   updateProduct() {

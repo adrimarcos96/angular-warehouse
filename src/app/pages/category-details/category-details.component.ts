@@ -33,8 +33,6 @@ export class CategoryDetailsComponent {
         this.category = category;
         this.productsToShow = response.productsToShow;
         this.totalProducts = response.totalProducts;
-      } else {
-        console.log('Redirecting to 404 page');
       }
       this.isLoading = false;
     });

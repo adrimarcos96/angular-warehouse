@@ -21,7 +21,7 @@ export class CategoriesComponent {
   constructor(private categoriesService: CategoriesService) {}
 
   ngOnInit() {
-    this.categoriesService.getCategoriesByPages(0, this.pageSize);
+    this.categoriesService.getCategories(0, this.pageSize);
     this.categoriesService.getCategoriesDataUpdadateListener().subscribe((data: any) => {
       this.categoriesToShow = data.categoriesToShow;
       this.total = data.total;

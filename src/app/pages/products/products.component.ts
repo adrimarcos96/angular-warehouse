@@ -20,7 +20,7 @@ export class ProductsComponent {
   constructor(private productsService: ProductsService) {}
 
   ngOnInit() {
-    this.productsService.getProductsByPages(0, this.pageSize);
+    this.productsService.getProducts(0, this.pageSize);
     this.productsService.getProductsDataUpdadateListener().subscribe((data: any) => {
       this.productsToShow = data.productsToShow;
       this.total = data.total;

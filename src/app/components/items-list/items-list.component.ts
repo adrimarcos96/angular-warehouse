@@ -34,7 +34,6 @@ export class ItemsListComponent {
 
       case 'CategoryItems':
         this.itemDeatilsBaseUrl = 'products/';
-        this.categoriesService.getCategoryById(this.id, this.pageSize);
         this.categoriesService.getCategoryDetailsUpdadateListener().subscribe((data: any) => {
           this.itemsPages = [data.category.products];
           this.isLoading = false;
