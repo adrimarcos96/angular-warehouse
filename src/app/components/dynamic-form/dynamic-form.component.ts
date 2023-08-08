@@ -12,7 +12,6 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
   templateUrl: './dynamic-form.component.html',
   styleUrls: ['./dynamic-form.component.scss']
 })
-
 export class DynamicFormComponent {
   @Input() action = '';
   @Input() formType = '';
@@ -31,10 +30,6 @@ export class DynamicFormComponent {
 
   productsToAdd: Product[] = []
   productFormModal: any;
-  isProductFormModalOpen = false;
-  mobileIsOpen = false;
-  desktopIsOpen = false;
-  modal: any;
 
   constructor(private router: Router, private modalService: NgbModal) {}
 
@@ -116,41 +111,21 @@ export class DynamicFormComponent {
   }
 
   openProductFormModal(modal: any) {
-    this.modal = modal;
     const fullscreen = window.innerWidth <= 980;
-    const size = !fullscreen ? { size: 'lg' } : {}
+    const size = !fullscreen ? { size: 'lg' } : {};
     this.productFormModal = this.modalService.open(modal, { fullscreen, backdrop: true, ...size, windowClass: 'product-form-modal' });
-    this.isProductFormModalOpen = true;
-    if (fullscreen) {
-      this.mobileIsOpen = true;
-      this.desktopIsOpen = false;
-    } else {
-      this.mobileIsOpen = false;
-      this.desktopIsOpen = true;
-    }
+  }
+
+  closeProductFormModal() {
+    this.productFormModal.close();
+    this.productFormModal = null;
   }
 
   changeSizeProductFormModal() {
-    if (this.modal && this.isProductFormModalOpen) {
+    if (this.productFormModal) {
       const fullscreen = window.innerWidth <= 980;
-
-      if (fullscreen) {
-        if (!this.mobileIsOpen) {
-          this.modalService.dismissAll();
-          this.productFormModal = this.modalService.open(this.modal, { fullscreen, backdrop: true, windowClass: 'product-form-modal' });
-          this.mobileIsOpen = true;
-          this.desktopIsOpen = false;
-        }
-      } else {
-        if (!this.desktopIsOpen) {
-          this.modalService.dismissAll();
-          const size = !fullscreen ? { size: 'lg' } : {}
-          this.productFormModal = this.modalService.open(this.modal, { fullscreen, backdrop: true, ...size, windowClass: 'product-form-modal' });
-          this.mobileIsOpen = false;
-          this.desktopIsOpen = true;
-        }
-      }
-
+      const size = !fullscreen ? { size: 'lg' } : {};
+      this.productFormModal.update({ fullscreen, ...size });
     }
   }
 
